@@ -55,7 +55,7 @@ int n;
 vi arr,tree;
 void build(){
     // fill leaves of the tree
-    for(int i = 0; i < n;++i){
+    for(int i = 0; i < sz(arr);++i){
         tree[n+i] = arr[i];
     }
     // fill the intervals nodes from their left&right children
@@ -103,8 +103,8 @@ void mainData(){
     arr.resize(n);
     for(auto &i:arr)
         cin>>i;
-    while (__builtin_popcount(n) != 1)   // this change our tree size to the nearest power of 2
-        arr.pb(0),n++;
+    while (__builtin_popcount(n) != 1)   // this change our tree size to the next power of 2 if it was not
+       n++;
     tree.resize(2*n);
     build();
     takeQueries(q);
