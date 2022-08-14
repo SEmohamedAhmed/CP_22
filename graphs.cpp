@@ -240,7 +240,55 @@ namespace graph{
         // bfsSSSP(1);
         // int lpt = bfsSSSP(furthest);     // this bfs should return last distance achieved
     }
+    /****************************************************************************************************/
     
+        vector<int> parent; // to get the path
+        bool dijkstra(int src,vector<vector<pair<int,ll>>> &graph){     // basic dijkstra , to get cheapest path from src to destination
+            int n = graph.size();
+            vector<ll> dist(n,INF);
+            parent.resize(n,-1);
+            vector<bool> vis(n);
+            priority_queue<pair<ll,int>>nextToVisit; // cost,toNode
+            nextToVisit.emplace(0,src);
+            dist[src] = 0;
+            while (!nextToVisit.empty()){
+                int u = nextToVisit.top().second;
+                nextToVisit.pop();
+                if(vis[u])continue;
+                vis[u] = 1;
+                for(auto &next :graph[u]){
+                    ll cost = next.second;
+                    int v = next.first;
+                    if(dist[u] + cost < dist[v]){
+                        parent[v] = u;
+                        dist[v] = dist[u] + cost;
+                        nextToVisit.emplace(-dist[v],v);
+                    }
+                }
+            }
+            if(dist[N] >= INF){ // can reach destination
+                cout << -1;
+                return 0;
+            }
+            return 1;
+            /*rep(i,n-1)cout <<dist[i] << el;
+            rep(i,n-1)cout <<parent[i] << el;*/
+        }
+        void printPath(int source = 1, int dest = N)
+        {
+            stack<int> st;
+            int final = dest;
+            while(parent[dest] != source){
+                dest = parent[dest];
+                st.push(dest);
+            }
+            cout<<source<<" ";
+            while(!st.empty()){
+                cout<<st.top()<<" ";
+                st.pop();
+            }
+            cout<<final<<el;
+        }
     /****************************************************************************************************/
     class DSU{
     public:
