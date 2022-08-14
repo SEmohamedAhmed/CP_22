@@ -145,6 +145,9 @@ namespace numerTheory{
         ans += count_if(all(primeFacto1),isPositive) + count_if(all(primeFacto2),isPositive);
         return ans;
       }
+   void NthFibonacci(int N){
+      ll NthFibonacci =  pow(((1 + sqrt(5)) / 2),N) / sqrt(5) + (1 / 2.0);    // watch out overflow (Fibonacci sequence by golden ratio)  
+    }
 }
 namespace numerTheory;
 
