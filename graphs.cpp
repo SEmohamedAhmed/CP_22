@@ -387,7 +387,7 @@ namespace graph{
     
     /****************************************************************************************************/
 
-    void dfsts(int a) {
+    void dfsts(int a=1) {     // call this function with root node (1) , for preprocessing, then you can use LCA fn
         // tree ancestors dfs
         for(int b : children[a]) {
             depth[b] = depth[a] + 1;
@@ -403,18 +403,15 @@ namespace graph{
         if(depth[a] < depth[b]) {
             swap(a, b);
         }
-        // 1) Get same depth.
         int k = depth[a] - depth[b];
         for(int j = LOG - 1; j >= 0; j--) {
             if(k & (1 << j)) {
                 a = up[a][j]; // parent of a
             }
         }
-        // 2) if b was ancestor of a then now a==b
         if(a == b) {
             return a;
         }
-        // 3) move both a and b with powers of two
         for(int j = LOG - 1; j >= 0; j--) {
             if(up[a][j] != up[b][j]) {
                 a = up[a][j];
