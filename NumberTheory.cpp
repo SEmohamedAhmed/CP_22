@@ -6,6 +6,10 @@ const ll  MAX=1e5+5, MOD = 1e9+7,INF = 1e14;
 const double EPS=1e-9,PI = acos(-1);
 
 namespace numerTheory{ 
+  ll MODFixer(ll x){
+    // it works in -ve&+ve x
+    return ( x % MOD + MOD ) % MOD;
+  }
   ll GCD(ll x, ll y) {
       if (x == 0) return y;
       if (y == 0) return x;
