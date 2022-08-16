@@ -203,6 +203,53 @@
           return lisT;
       }
       /*************************************************************************************************************/
+        // mancharAlgo is mainly used to get longest palindrome in a string
+        #define MAX_size 20
+        int manchar[MAX_size * 2];
+        string convertToNewString(const string &s) {
+            string newString = "@";
+            for (int i = 0; i < sz(s); i++)
+                newString += "#" + s.substr(i, 1);
+            newString += "#$";
+            return newString;
+        }
+
+        string mancharAlgo(const string &s) {
+            // O(N) time
+            string Q = convertToNewString(s);
+            int c = 0, r = 0;
+            for (int i = 1; i < Q.size() - 1; i++) {
+                    int iMirror = c - (i - c);
+                    if(r > i) {
+                        manchar[i] = min(r - i, manchar[iMirror]);
+                    }
+                    while (Q[i + 1 + manchar[i]] == Q[i - 1 - manchar[i]]){
+                        manchar[i]++;
+                    }
+                    if (i + manchar[i] > r) {
+                        c = i;
+                        r = i + manchar[i];
+                    }
+            }
+            int maxPalindrome = 0;
+            int centerIndex = 0;
+            for (int i = 1; i < Q.size() - 1; i++) {
+
+                if (manchar[i] > maxPalindrome) {
+                    maxPalindrome = manchar[i];
+                    centerIndex = i;
+                }
+            }
+
+                    cout << maxPalindrome << "\n";
+                    return s.substr( (centerIndex - 1 - maxPalindrome) / 2, maxPalindrome);
+                }
+                void checkAlgo(){
+                    string ar{"aaaaaaaaaaaaaaabbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbb"};
+                    cout <<   mancharAlgo(ar);
+                }
+        /*************************************************************************************************************/
+
                                                         // SOME NOTES : 
           // It takes one line from a file and put it in a string
         string str;
