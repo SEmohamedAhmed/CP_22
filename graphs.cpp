@@ -479,5 +479,142 @@ namespace graph{
         }
         return graph;
     }
+    /****************************************************************************************************************************************/
+         #define MAXV 50
+        #define MAXE 200
+        struct DirectedEulerGraph {
+            int V,ne,last[MAXV],to[MAXE],next[MAXE],cur[MAXV];
+            int in[MAXV],out[MAXV];
+            int start,end;
+            std::vector<int> path;
 
-}
+            DirectedEulerGraph(){}
+
+            void clear(int V_){
+                V = V_; ne = 0;
+                memset(last,-1,sizeof last);
+                memset(in,0,sizeof in);
+                memset(out,0,sizeof out);
+            }
+
+            void add_edge(int u, int v){
+                to[ne] = v; next[ne] = last[u]; last[u] = ne++;
+                ++out[u]; ++in[v];
+                start = u;
+            }
+
+            bool check(){
+                int cont = 0,aux = start;
+                start = end = -1;
+
+                for(int i = 0;i < V;++i){
+                    if(in[i] == out[i]) ++cont;
+                    else if(out[i] == in[i] + 1) start = i;
+                    else if(in[i] == out[i] + 1) end = i;
+                    else return false;
+                }
+
+                if(cont == V){
+                    start = end = aux;
+                    return true;
+                }
+
+                return (cont == V - 2 && start != -1 && end != -1);
+            }
+
+            bool build(){
+                stack<int> st;
+                st.push(start);
+                memcpy(cur,last,sizeof last);
+                path.clear();
+
+                while(!st.empty()){
+                    int u = st.top();
+
+                    if(cur[u] == -1){
+                        path.push_back(u);
+                        st.pop();
+                    }else{
+                        int v = to[ cur[u] ];
+                        cur[u] = next[ cur[u] ];
+                        st.push(v);
+                    }
+                }
+
+                reverse(path.begin(),path.end());
+                return path.size() == ne + 1;
+            }
+        };
+      
+/****************************************************************************************************************************************/
+            class Euler{
+            /*
+             * Eulerian_Path_undirected is a path in graph that visits every edge exactly once.
+             * */
+            struct Edge;
+            typedef list<Edge>::iterator iter;
+            struct Edge{
+                int next_vertex;
+                iter reverse_edge;
+                Edge(int next_vertex):next_vertex(next_vertex){ }
+            };
+            static const int max_vertices = 6;
+            int num_vertices;
+            list<Edge> adj[max_vertices];		// adjacency list
+            vector<int> path;
+
+            void find_path(int v){
+                while(adj[v].size() > 0){
+                    int vn = adj[v].front().next_vertex;
+                    adj[vn].erase(adj[v].front().reverse_edge);
+                    adj[v].pop_front();
+                    find_path(vn);
+                }
+                path.push_back(v);
+            }
+
+            void add_edge(int a, int b){
+                adj[a].push_front(Edge(b));
+                iter ita = adj[a].begin();
+                adj[b].push_front(Edge(a));
+                iter itb = adj[b].begin();
+                ita->reverse_edge = itb;
+                itb->reverse_edge = ita;
+            }
+            void solve(){
+                add_edge(1,2);
+                add_edge(2,3);
+                add_edge(3,4);
+                add_edge(4,5);
+                find_path(1);
+                reverse(all(path));
+                //print(path)
+            }
+        };
+    /****************************************************************************************************************************************/
+
+        int diameter_tree(int s,const vector<vector<int>>&Graph){
+            queue<int> Q;
+            Q.push(s);
+            const int  MAX = 100;
+            bool vis[MAX];
+            int prev[MAX];
+            memset(vis,0,sizeof(vis));
+            vis[s] = true;      // or use vid trick
+            prev[s] = -1;
+            int ans = s;
+            while(!Q.empty()){
+                int aux = Q.front();
+                Q.pop();
+                ans = aux;
+                for(int i=Graph[aux].size()-1;i>=0;--i){
+                    int v = Graph[aux][i];
+                    if(vis[v]) continue;
+                    vis[v] = 1;
+                    Q.push(v);
+                    prev[v] = aux;
+                }
+            }
+            return ans;
+        }
+    /****************************************************************************************************************************************/
