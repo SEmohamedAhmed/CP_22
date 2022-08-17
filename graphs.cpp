@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 typedef long long ll;
 typedef unsigned long long ull;
+#define pi pair<int,int>
+#define rep0(i,N) for(int i=0;i<N;++i)
+#define rep(i,N) for(int i=1;i<=N;++i)
 #define FastIo ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0); 
 using namespace std;
 #include <ext/pb_ds/assoc_container.hpp>
@@ -14,6 +17,7 @@ namespace graph{
     int dy[]{0,1,0,-1};
     int dX[]{0,0,1,-1,1,-1,-1,1};  // east&west&south&north&southEast&northWest&northEast&southWest (Respectively)
     int dY[]{1,-1,0,0,1,-1,1,-1};
+    map<pi,char>mp{{{1,0},'D'},{{0,1},'R'},{{-1,0},'U'},{{0,-1},'L'}};     // UDLR way
     vector<vector<int>> adjlist(MAX);
     vector<vector<int>> adjMat(MAX);
     vector<int> topoSort;
@@ -232,15 +236,67 @@ namespace graph{
             distance++;
         }
     }
-    
+/****************************************************************************************************/
+    int _0_1_BFS(int a,int b,int c,int d){
+        //we apply this function if our edge weights can only be 0 and x (x >= 0) ? yes !
+        int ans = 0;
+        rep0(i,N+1)
+        rep0(j,M+1)
+        dist[i][j] = INT_MAX;
+        deque <pi> deque1;
+        dist[a][b] = 0;
+        deque1.push_back({a,b});
+        while (!deque1.empty()){
+            int curX = deque1.front().F,curY = deque1.front().S;
+            if(curX == c && curY == d){
+            ans = dist[c][d];
+            break;
+        }
+        deque1.pop_front();
+        rep0(i,8){
+        int weight;
+        if(codeToDir[grid[curX][curY]-'0'] == i)   
+            weight=0;
+        else
+            weight=1;
+
+        int xx = dirX[i] + curX,yy = curY + dirY[i];
+        if(is_Valid(xx,yy)){
+        // checking for the optimal distance
+        if (dist[xx][yy] > weight + dist[curX][curY]){
+        dist[xx][yy] = weight + dist[curX][curY];
+        if (weight == 0)
+        deque1.push_front({xx,yy});
+        else
+        deque1.push_back({xx,yy});
+        }}}}
+        return ans;
+        }
+        // in main
+        /*
+        This problem can also be solved by Dijkstra,
+        but the time complexity will be O(E + V Log V)
+        ,whereas by BFS it will be O(V+E).
+        */
+        cin>>N>>M;
+        rep(i,N)
+        rep(j,M)
+        cin>>grid[i][j];
+        cin>>K;
+        while (K--) {
+        int start_x, start_y, end_x, end_y;
+        cin >> start_x >> start_y >> end_x >> end_y;
+        cout << _0_1_BFS(start_x, start_y, end_x, end_y) << el;
+}
+/****************************************************************************************************/
     void lpt(){
-        // to get the longest path in a tree
-        // we bfs from node 1 and maintains the furthest node in the code
-        // then bfs from the furthest node
+        // to get the longest path in a tree-graph
+        // we bfs-dfs from node 1 and maintains the furthest node in the code
+        // then bfs-dfs from the furthest node
         // bfsSSSP(1);
         // int lpt = bfsSSSP(furthest);     // this bfs should return last distance achieved
     }
-    /****************************************************************************************************/
+/****************************************************************************************************/
     
         vector<int> parent; // to get the path
         bool dijkstra(int src,vector<vector<pair<int,ll>>> &graph){     // basic dijkstra , to get cheapest path from src to destination
