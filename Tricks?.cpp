@@ -1,3 +1,9 @@
+#define el '\n'
+#define V vector
+#define vi V<int>
+#define vvi V<vi>
+#define rep(i,n) for(int i=1;i<=n;++i)  //[1:N]
+
 /*
     An Example Problem :
     Consider zero array of size n
@@ -17,6 +23,27 @@
     }
     for(int i = 1;i<arrSize;++i)
         pre[i]+=pre[i-1];
+}
+/***************************************************/
+// 2D prefixSum
+int N,M;
+cin>>N>>M;
+vvi arr(N+1,vi(M+1,0));         //1-based 
+rep(i,N)rep(j,M)cin>>arr[i][j];
+// accumulate rows
+for(int i = 1; i <= N;++i)
+    for(int j = 1; j <= M;++j)
+        arr[i][j]+=arr[i][j-1];
+// accumulate columns
+for(int i = 1; i <= M;++i)
+    for(int j = 1; j <= N;++j)
+        arr[i][j]+=arr[i-1][j];
+// solve query sum from (i,j) to (k,l)
+int q,i,j,k,l;
+cin>>q;
+while (q--){
+cin>>i>>j>>k>>l;
+  cout <<   arr[k][l] - arr[k][j-1] - arr[i-1][l] + arr[i-1][j-1] <<el;
 }
 /***************************************************/
 ll getMaxNthElements(int kth,vl &pref){
