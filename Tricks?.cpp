@@ -85,3 +85,16 @@ void solve() {
   else cnt=0;   // if there are 2 or more char that has odd #ocurrences then we can not build a plindrom string
   cout<<cnt<<el;}
 /***************************************************/
+ull maxSubArrayOfLength(int len,const vector<int>&arr){
+    // max sub arrays of length len in O(N)
+    ull sum = 0;
+    // Consider first subarray of size k
+    for (int i = 0; i < len; i++)
+        sum += arr[i];
+    int N = arr.size();
+    for (int i = len; i < N; i++) {
+        sum = (sum - arr[i - len]) + arr[i];
+    }
+    return sum;
+}
+/******************************************************/
