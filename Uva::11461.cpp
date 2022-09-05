@@ -62,7 +62,7 @@ ll T=1,N,M,K;
 /*************************************************/
 ordered_set s;
 void pre(){
-rep(i,317)s.insert(i*i);
+rep(i,317)s.insert(i*i);    // put here sqrt(max(b)), to gurantee that all sqrt numbers will be generated
 }
 /*************************************************/
 void solve() {
